@@ -4,9 +4,10 @@ import os
 from sklearn.svm import SVC
 import matplotlib.pyplot as plt
 %matplotlib inline
-directory = 'ADFA-LD\\ADFA-LD\\Attack_Data_Master\\'
 file = 1
 type = 0
+seqFreq = np.array[]
+numberSeqFreq = np.array[]
 filetype = ("Adduser_", "Hydra_FTP_", "Hydra_SSH_", "Java_Meterpreter_", "Meterpeter_", "Web_Shell_")
 while(type  < 6){
     while(file < 8){
@@ -21,11 +22,29 @@ while(type  < 6){
         three = calls[2]
         n = 3
         while(len(calls) > n ){
+                    k ++
+                }
+                k = 0
+                pass = 0
+                while(k < seqFreq && pass == 0){
+                    if(seqFreq[k] == seq){
+                    numberSeqFreq[k] ++
+                    pass = 1
+                    }
+                    k ++
+                }
+                if (pass == 0){
+                    seqFreq.append(seq)
+                    numberSeqFreq.append(1)
+                }
 
-        n ++
+                n ++
+            }
+
+
+            l++
         }
 
-    f.close()
     file ++
     }
     type ++
