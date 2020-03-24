@@ -1,8 +1,8 @@
-import pandas as pd
-import numpy as np
+# import pandas as pd
+# import numpy as np
 import os
-from sklearn.svm import SVC
-import matplotlib.pyplot as plt
+# from sklearn.svm import SVC
+# import matplotlib.pyplot as plt
 file = 1
 type = 0
 seqFreq = []
@@ -10,11 +10,13 @@ numberSeqFreq = []
 filetype = ('Adduser_', 'Hydra_FTP_', 'Hydra_SSH_', 'Java_Meterpreter_', 'Meterpeter_', 'Web_Shell_')
 while(type  < 6):
     while(file < 8):
-        directory = os.join('ADFA-LD\\ADFA-LD\\Attack_Data_Master\\',filetype[type], file, '\\')
+        filenum = ''.join([filetype[type], str(file)])
+        directory = '\\'.join(['ADFA-LD', 'ADFA-LD', 'Attack_Data_Master',filenum])
         listing = os.listdir(directory)
         l = 0
         while(l < len(listing)):
-            f = open(os.join(directory,'\\',infile),'r')
+            print(listing)
+            f = open('\\'.join([directory,listing[l]]),'r')
             sequence = f.read()
             f.close()
             calls = sequence.split()
@@ -25,13 +27,16 @@ while(type  < 6):
                 k = 0
                 seq = []
                 while(k < gram):
-                    seq.append(cals[(n+k-grams)])
+                    seq.append(calls[(n+k-gram)])
                     k += 1
 
                 print(seq)
                 k = 0
                 passval = 0
-                while (k < seqFreq and passval == 0):
+                while (k < len(seqFreq) and passval == 0):
+                    if(len(seqFreq) == 0):
+                        seqFreq.append(seq)
+                        numberSeqFreq.append(1)
                     if(seqFreq[k] == seq):
                         numberSeqFreq[k] += 1
                         passval = 1
