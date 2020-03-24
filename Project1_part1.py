@@ -106,7 +106,7 @@ def inputDataBenign(typeCalls):
             n += 1
             txtfile.append([seqFreq, numberSeqFreq])
         benign.append(txtfile)
-    print(benign[0][0])
+    return benign
 
 def
 
