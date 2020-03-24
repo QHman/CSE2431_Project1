@@ -5,34 +5,46 @@ import os
 # import matplotlib.pyplot as plt
 file = 1
 type = 0
+numtype =  6
+numfile =  7
 seqFreq = []
 numberSeqFreq = []
-filetype = ('Adduser_', 'Hydra_FTP_', 'Hydra_SSH_', 'Java_Meterpreter_', 'Meterpeter_', 'Web_Shell_')
-while(type  < 6):
-    while(file < 8):
+attacks = []
+filetype = ('Adduser_', 'Hydra_FTP_', 'Hydra_SSH_', 'Java_Meterpreter_', 'Meterpreter_', 'Web_Shell_')
+# Types of Attacks
+while(type  < numtype):
+    print(filetype[type])
+    file = 1
+    # Folder in type ex. 1, 2, 3
+    folder = []
+    while(file <= numfile):
         filenum = ''.join([filetype[type], str(file)])
+        print(filenum)
         directory = '\\'.join(['ADFA-LD', 'ADFA-LD', 'Attack_Data_Master',filenum])
         listing = os.listdir(directory)
         l = 0
+        # Text Doc in folder... About 10
         while(l < len(listing)):
-            print(listing)
+            print(listing[l])
             f = open('\\'.join([directory,listing[l]]),'r')
             sequence = f.read()
             f.close()
             calls = sequence.split()
-            print(calls)
-            gram = 2
+            print(len(calls))
+            gram = 3
             n = gram
+            seqFreq = []
+            numberSeqFreq = []
+            # Take sequence from file, change to frequency
             while (len(calls) >= n ):
                 k = 0
                 seq = []
                 while(k < gram):
                     seq.append(calls[(n+k-gram)])
                     k += 1
-
-                print(seq)
                 k = 0
                 passval = 0
+                # Save each frequency, per text file
                 while (k < len(seqFreq) and passval == 0):
                     if(len(seqFreq) == 0):
                         seqFreq.append(seq)
@@ -42,12 +54,13 @@ while(type  < 6):
                         passval = 1
 
                     k += 1
-
                 if (passval == 0):
                     seqFreq.append(seq)
                     numberSeqFreq.append(1)
-                print(seqFreq)
                 n += 1
-            l +=1
-        file +=1
-    type +=1
+            l += 1
+            folder.append([seqFreq, numberSeqFreq])
+        file += 1
+    attacks.append(folder)
+    print(attacks)
+    type += 1
