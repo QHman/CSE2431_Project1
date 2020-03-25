@@ -59,9 +59,9 @@ def inputDataAttacks(startnum, endnumfile):
             folder.append(file)
             file = []
             startnumfile += 1
-            attacks.append(folder)
-
+        attacks.append(folder)
     print(attacks[0][0][0])
+    print(len(attacks))
     return attacks
 
 def inputDataBenign(typeCalls):
@@ -107,8 +107,44 @@ def inputDataBenign(typeCalls):
             txtfile.append([seqFreq, numberSeqFreq])
         benign.append(txtfile)
     return benign
+ # attack: data in, m: percent top, ex .2, .3
+def topmAttacks(attack, m):
+    totbytype = []
+    for type in attack:
+        totalFreq = []
+        for folder in type:
+            for file in folder:
+                if totalFreq == []:
+                    totalFreq = file
+                else:
+                    k = 0
+                    while (k < len(file[0]):
+                        l = 0
+                        passval = 0
+                        while(l < len(totalFreq[0]) and passval == 0): # possible bug
+                            if (file[0][k] == totalFreq[0][l]):
+                                totalFreq[1][l] += file[1][k]
+                                passval = 1
+                            if (passval == 0):
+                                totalFreq[0].append([file[0][k],file[1][k]])
+                            l += 1
+                        k +=1
+        totbytype.append(totalFreq)
+    for type in totbytype:
+        k = round(m*len(type[0]))
+        topcount = []
+        for x in range(k):
+            topcount.append([0,0])
+        n = 0
+        while (n < len(type))
+            l = 0
+            while (l <= k):
+                if (type[1][n] >= topcount[1][l]):
+                     tempcount = [topcount[0][l], topcount[1][l]]
+                     topcount
 
-def
 
+
+m = .3
 inputDataAttacks(1,7)
-inputDataBenign('Training_Data_Master')
+# inputDataBenign('Training_Data_Master')
