@@ -18,7 +18,6 @@ def inputDataAttacks(startnum, endnumfile):
     for files in filetype:
         startnumfile = startnum
         while(startnumfile <= endnumfile):
-            print(''.join([files, str(startnumfile)]))
             directory2 = '\\'.join([directory, ''.join([files, str(startnumfile)])])
             #   Folder in type ex. 1, 2, 3
             folder = []
@@ -60,8 +59,8 @@ def inputDataAttacks(startnum, endnumfile):
             file = []
             startnumfile += 1
         attacks.append(folder)
-    print(attacks[0][0][0])
-    print(len(attacks))
+    # print(attacks[0][0][0])
+    # print(len(attacks))
     return attacks
 
 def inputDataBenign(typeCalls):
@@ -107,53 +106,96 @@ def inputDataBenign(typeCalls):
             txtfile.append([seqFreq, numberSeqFreq])
         benign.append(txtfile)
     return benign
+
+def freqfindtot(folder): # [2xn], [calls, number]
+    total = []
+    seqFreq = []
+    numberSeqFreq = []
+    for file in folder:
+        n = 0
+        while ( n < len(file[0])):
+            k = 0
+            passval = 0
+            while (k < len(seqFreq) and passval == 0):
+                if(len(seqFreq) == 0):
+                    seqFreq.append(file[0][n])
+                    numberSeqFreq.append(file[1][n])
+                if(seqFreq[k] == file[0][n]):
+                    numberSeqFreq[k] += file[1][n]
+                    passval = 1
+                k += 1
+            if (passval == 0):
+                seqFreq.append(file[0][n])
+                numberSeqFreq.append(file[1][n])
+            n += 1
+    return [seqFreq,numberSeqFreq]
+
+def topm(totbytype, m):
+    totalTopFreq = []
+    calls = []
+    count = []
+    for  type in totbytype: # type
+        k = round(m*len(type[0]))
+        topcount = []
+        topcalls =[]
+        n = 0
+        while (n < len(type[0])):
+            l = 0
+            count = type[1][n]
+            calls = type[0][n]
+            while (l < len(topcount)):
+                if (count >= topcount[l]):
+                    tempcount = topcount[l]
+                    topcount[l] = count
+                    count = tempcount
+
+                    tempcalls = topcalls[l]
+                    topcalls[l] = calls
+                    calls = tempcalls
+                l += 1
+            topcount.append(count)
+            topcalls.append(calls)
+            n += 1
+        totalFreq = []
+        for x in range(int(k)):
+            totalFreq.append(topcalls[x])
+        for freq in totalFreq:
+            if (len(totalTopFreq) == 0):
+                totalTopFreq.append(freq)
+            else:
+                for topFreq in totalTopFreq:
+                    passval = 0
+                    if (topFreq == freq):
+                        passval == 1
+                if (passval == 0):
+                    totalTopFreq.append(freq)
+    return totalTopFreq
+
+
+
+
+
  # attack: data in, m: percent top, ex .2, .3
+
 def topmAttacks(attack, m):
     totbytype = []
     for type in attack:
         totalFreq = []
         for folder in type:
-            for file in folder:
-                if totalFreq == []:
-                    totalFreq = file
-                else:
-                    k = 0
-                    while (k < len(file[0]):
-                        l = 0
-                        passval = 0
-                        while(l < len(totalFreq[0]) and passval == 0): # possible bug
-                            if (file[0][k] == totalFreq[0][l]):
-                                totalFreq[1][l] += file[1][k]
-                                passval = 1
-                            if (passval == 0):
-                                totalFreq[0].append([file[0][k],file[1][k]])
-                            l += 1
-                        k +=1
-        totbytype.append(totalFreq)
-    totalTopFreq = []
-    for  type in totbytype: # type
-        k = round(m*len(type[0]))
-        topcount = []
-        for x in range(k):
-            topcount.append([0])
-        n = 0
-        while (n < len(type)):
-            l = 0
-            count = type[n][0]
-            while (l <= k):
-                if (count >= topcount[l]):
-                    tempcount = topcount[l]
-                    topcount[l] = count
-                    count = tempcount
-                l += 1
-            n += 1
-        for calls in topcount:
-            x = 0
-            while (x < len(totalTopFreq)):
-                if (calls != totalTopFreq[x]):
-                    totalTopFreq.append(calls)
-                x +=1
-        
+            totalFreq = freqfindtot(folder)
+            totbytype.append(totalFreq)
+    topmpercent = topm(totbytype, m)
+    print(topmpercent)
+    return topmpercent
+
+
+
+
+
+
+
+
+
 
 m = .3
 attack = inputDataAttacks(1,7)
