@@ -130,21 +130,32 @@ def topmAttacks(attack, m):
                             l += 1
                         k +=1
         totbytype.append(totalFreq)
-    for type in totbytype:
+    totalTopFreq = []
+    for  type in totbytype: # type
         k = round(m*len(type[0]))
         topcount = []
         for x in range(k):
-            topcount.append([0,0])
+            topcount.append([0])
         n = 0
-        while (n < len(type))
+        while (n < len(type)):
             l = 0
+            count = type[n][0]
             while (l <= k):
-                if (type[1][n] >= topcount[1][l]):
-                     tempcount = [topcount[0][l], topcount[1][l]]
-                     topcount
-
-
+                if (count >= topcount[l]):
+                    tempcount = topcount[l]
+                    topcount[l] = count
+                    count = tempcount
+                l += 1
+            n += 1
+        for calls in topcount:
+            x = 0
+            while (x < len(totalTopFreq)):
+                if (calls != totalTopFreq[x]):
+                    totalTopFreq.append(calls)
+                x +=1
+        
 
 m = .3
-inputDataAttacks(1,7)
+attack = inputDataAttacks(1,7)
+topmAttacks(attack, m)
 # inputDataBenign('Training_Data_Master')
