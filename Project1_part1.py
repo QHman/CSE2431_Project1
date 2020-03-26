@@ -6,7 +6,6 @@ import os
 
 def inputDataAttacks(startnum, endnumfile):
     typeCalls = 'Attack_Data_Master'
-    startnumfile = startnum
     seqFreq = []
     numberSeqFreq = []
     attacks = []
@@ -17,10 +16,11 @@ def inputDataAttacks(startnum, endnumfile):
     # Types of Attacks
     for files in filetype:
         startnumfile = startnum
+        folder = []
         while(startnumfile <= endnumfile):
             directory2 = '\\'.join([directory, ''.join([files, str(startnumfile)])])
             #   Folder in type ex. 1, 2, 3
-            folder = []
+
             listing = os.listdir(directory2)
             # Text Doc in folder... About 10
             for l in listing:
@@ -54,11 +54,11 @@ def inputDataAttacks(startnum, endnumfile):
                         seqFreq.append(seq)
                         numberSeqFreq.append(1)
                     n += 1
-                file.append([seqFreq, numberSeqFreq])
-            folder.append(file)
+                file.append([seqFreq, numberSeqFreq]) # 7, [2]
+            folder.append(file) # 7
             file = []
             startnumfile += 1
-        attacks.append(folder)
+        attacks.append(folder) #6
     # print(attacks[0][0][0])
     # print(len(attacks))
     return attacks
@@ -103,8 +103,10 @@ def inputDataBenign(typeCalls):
                 seqFreq.append(seq)
                 numberSeqFreq.append(1)
             n += 1
-            txtfile.append([seqFreq, numberSeqFreq])
-        benign.append(txtfile)
+
+        txtfile.append([seqFreq, numberSeqFreq])
+    benign.append(txtfile)
+    print("Done: Benign")
     return benign
 
 def freqfindtot(folder): # [2xn], [calls, number]
@@ -113,7 +115,7 @@ def freqfindtot(folder): # [2xn], [calls, number]
     numberSeqFreq = []
     for file in folder:
         n = 0
-        while ( n < len(file[0])):
+        while (n < len(file[0])):
             k = 0
             passval = 0
             while (k < len(seqFreq) and passval == 0):
@@ -130,6 +132,7 @@ def freqfindtot(folder): # [2xn], [calls, number]
             n += 1
     return [seqFreq,numberSeqFreq]
 
+# finds top m, need to give it array of arrays conatining the calls and the frequencies
 def topm(totbytype, m):
     totalTopFreq = []
     calls = []
@@ -177,17 +180,18 @@ def topm(totbytype, m):
 
  # attack: data in, m: percent top, ex .2, .3
 
-def topmAttacks(attack, m):
+def topmAttacksAndBenign(attack, m):
     totbytype = []
+    topmpercent = []
     for type in attack:
+
         totalFreq = []
+
         for folder in type:
             totalFreq = freqfindtot(folder)
             totbytype.append(totalFreq)
     topmpercent = topm(totbytype, m)
-    print(topmpercent)
     return topmpercent
-
 
 
 
@@ -199,5 +203,18 @@ def topmAttacks(attack, m):
 
 m = .3
 attack = inputDataAttacks(1,7)
-topmAttacks(attack, m)
-# inputDataBenign('Training_Data_Master')
+topmAttacksAndBenign(attack, m)
+
+benign = inputDataBenign('Training_Data_Master')
+truebenign = [benign]
+print(len(truebenign))
+print(len(truebenign[0]))
+print(len(truebenign[0][0]))
+print(len(truebenign[0][0][0]))
+print('attack:')
+print(len(attack))
+print(len(attack[0]))
+print(len(attack[0][0]))
+print(len(attack[0][0][0]))
+
+topmAttacksAndBenign(truebenign, m)
