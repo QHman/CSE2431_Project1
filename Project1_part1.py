@@ -249,6 +249,8 @@ print(len(attackValFreqs[0]))
 benignValFreqs = toFreq(topMFreq, [benignVal])
 print(len(benignValFreqs[0]))
 
+# toFreq gives an array of vectors. where each index is a call sequence
+
 # data preprocessing
 # Separate attack data into attributes and labels
 x1 = attackFreqs.drop('Attack', axis=1)
