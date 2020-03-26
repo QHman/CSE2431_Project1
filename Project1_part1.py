@@ -61,6 +61,7 @@ def inputDataAttacks(startnum, endnumfile):
         attacks.append(folder) #6
     # print(attacks[0][0][0])
     # print(len(attacks))
+    print("Done: Attack")
     return attacks
 
 def inputDataBenign(typeCalls):
@@ -197,6 +198,7 @@ def topmAttacksAndBenign(attack,benign):
 
 def toFreq(mFreq, sequence):
     newFreqSet = []
+    totalNewFreq = []
     for type in sequence:
         for folder in type:
             for file in folder:
@@ -205,13 +207,14 @@ def toFreq(mFreq, sequence):
                     n = 0
                     passval = 0
                     while (n < len(file[0]) and passval == 0):
-                        if (file[0][n] == file):
+                        if (file[0][n] == freq):
                             newFreqSet.append(file[1][n])
                             passval = 1
                         n += 1
-                    if (passval == 1):
+                    if (passval == 0):
                         newFreqSet.append(0)
                 totalNewFreq.append(newFreqSet)
+    print('Done: Freq')
     return totalNewFreq
 
 m = .3
@@ -227,10 +230,24 @@ print(len(attack[0]))
 print(len(attack[0][0]))
 print(len(attack[0][0][0]))
 
+benignVal = inputDataBenign('Validation_Data_Master')
+attackVal = inputDataAttacks(7,10)
+
 topmper = topmAttacksAndBenign(attack,benign)
 topMFreq = topm(topmper,m)
-attackFreqs = toFreq(topMFreq,attack)
-benignFreqs = toFreq(topMFreq,[benign])
+print(len(topMFreq))
+
+attackTrainFreqs = toFreq(topMFreq,attack)
+print(len(attackTrainFreqs[0]))
+
+benignTrainFreqs = toFreq(topMFreq,[benign])
+print(len(benignTrainFreqs[0]))
+
+attackValFreqs = toFreq(topMFreq, attackVal)
+print(len(attackValFreqs[0]))
+
+benignValFreqs = toFreq(topMFreq, [benignVal])
+print(len(benignValFreqs[0]))
 
 # data preprocessing
 # Separate attack data into attributes and labels
