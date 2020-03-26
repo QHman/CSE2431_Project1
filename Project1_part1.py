@@ -241,22 +241,26 @@ y1 = attackFreqs['Attack']
 x2 = benignFreqs.drop('Benign', axis=1)
 y2 = benignFreqs['Benign']
 
-
+# Divide data for attack and benign into respective training and test sets
 from sklearn.model_selection import train_test_split
 x_trainAttack, x_testAttack, y_trainAttack, y_testAttack = train_test_split(x1, y1, test_size = 0.30)
 x_trainBenign, x_testBenign, y_trainBenign, y_testBenign = train_test_split(x2, y2, test_size = 0.30)
 
+# Train SVM algorithm using linear regression (Attack)
 from sklearn.svm import SVC
 svclassifier = SVC(kernel='linear')
 svclassifier.fit(x_trainAttack, y_trainAttack)
-y_predAttack = svclassifier.predict(x_testAttack)
 
+# Algorithm predictions and evaluation (Attack)
+y_predAttack = svclassifier.predict(x_testAttack)
 from sklearn.metrics import classification_report, confusion_matrix
 print(confusion_matrix(y_testAttack,y_predAttack))
 print(classification_report(y_testAttack,y_predAttack))
 
+# Train SVM algorithm using linear regression (Benign)
 svclassifier.fit(x_trainBenign, y_trainBenign)
-y_predBenign = svclassifier.predict(x_testBenign)
 
+# Algorithm predictions and evaluation (Attack)
+y_predBenign = svclassifier.predict(x_testBenign)
 print(confusion_matrix(y_testBenign,y_predBenign))
 print(classification_report(y_testBenign,y_predBenign))
