@@ -3,7 +3,7 @@
 import os
 # from sklearn.svm import SVC
 # import matplotlib.pyplot as plt
-
+# %matplotlib inline
 def inputDataAttacks(startnum, endnumfile):
     typeCalls = 'Attack_Data_Master'
     seqFreq = []
@@ -231,3 +231,32 @@ topmper = topmAttacksAndBenign(attack,benign)
 topMFreq = topm(topmper,m)
 attackFreqs = toFreq(topMFreq,attack)
 benignFreqs = toFreq(topMFreq,[benign])
+
+# data preprocessing
+# Separate attack data into attributes and labels
+x1 = attackFreqs.drop('Attack', axis=1)
+y1 = attackFreqs['Attack']
+
+# Separate benign data into attributes and labels
+x2 = benignFreqs.drop('Benign', axis=1)
+y2 = benignFreqs['Benign']
+
+
+from sklearn.model_selection import train_test_split
+x_trainAttack, x_testAttack, y_trainAttack, y_testAttack = train_test_split(x1, y1, test_size = 0.30)
+x_trainBenign, x_testBenign, y_trainBenign, y_testBenign = train_test_split(x2, y2, test_size = 0.30)
+
+from sklearn.svm import SVC
+svclassifier = SVC(kernel='linear')
+svclassifier.fit(x_trainAttack, y_trainAttack)
+y_predAttack = svclassifier.predict(x_testAttack)
+
+from sklearn.metrics import classification_report, confusion_matrix
+print(confusion_matrix(y_testAttack,y_predAttack))
+print(classification_report(y_testAttack,y_predAttack))
+
+svclassifier.fit(x_trainBenign, y_trainBenign)
+y_predBenign = svclassifier.predict(x_testBenign)
+
+print(confusion_matrix(y_testBenign,y_predBenign))
+print(classification_report(y_testBenign,y_predBenign))
