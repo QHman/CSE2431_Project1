@@ -1,9 +1,4 @@
-# import pandas as pd
-# import numpy as np
 import os
-# from sklearn.svm import SVC
-# import matplotlib.pyplot as plt
-# %matplotlib inline
 def inputDataAttacks(startnum, endnumfile):
     typeCalls = 'Attack_Data_Master'
     seqFreq = []
@@ -196,7 +191,7 @@ def topmAttacksAndBenign(attack,benign):
     return totbytype
 
 
-def toFreq(mFreq, sequence):
+def toFreq(mFreq, sequence, mal):
     newFreqSet = []
     totalNewFreq = []
     for type in sequence:
@@ -213,6 +208,7 @@ def toFreq(mFreq, sequence):
                         n += 1
                     if (passval == 0):
                         newFreqSet.append(0)
+                newFreqSet.append(mal)
                 totalNewFreq.append(newFreqSet)
     print('Done: Freq')
     return totalNewFreq
@@ -237,16 +233,16 @@ topmper = topmAttacksAndBenign(attack,benign)
 topMFreq = topm(topmper,m)
 print(len(topMFreq))
 
-attackTrainFreqs = toFreq(topMFreq,attack)
+attackTrainFreqs = toFreq(topMFreq,attack, 1)
 print(len(attackTrainFreqs[0]))
 
-benignTrainFreqs = toFreq(topMFreq,[benign])
+benignTrainFreqs = toFreq(topMFreq,[benign], 0)
 print(len(benignTrainFreqs[0]))
 
-attackValFreqs = toFreq(topMFreq, attackVal)
+attackValFreqs = toFreq(topMFreq, attackVal, 1)
 print(len(attackValFreqs[0]))
 
-benignValFreqs = toFreq(topMFreq, [benignVal])
+benignValFreqs = toFreq(topMFreq, [benignVal], 0)
 print(len(benignValFreqs[0]))
 
 # toFreq gives an array of vectors. where each index is a call sequence
