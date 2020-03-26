@@ -71,6 +71,7 @@ def inputDataBenign(typeCalls):
     directory = '\\'.join(['ADFA-LD', 'ADFA-LD', typeCalls])
     filetype = os.listdir(directory)
     # Types of Attacks
+    txtfile = []
     for type in filetype:
         f = open('\\'.join([directory,type]),'r')
         sequence = f.read()
@@ -81,7 +82,7 @@ def inputDataBenign(typeCalls):
         seqFreq = []
         numberSeqFreq = []
         # Take sequence from file, change to frequency
-        txtfile = []
+
         while (len(calls) >= n ):
             k = 0
             seq = []
@@ -180,19 +181,28 @@ def topm(totbytype, m):
 
  # attack: data in, m: percent top, ex .2, .3
 
-def topmAttacksAndBenign(attack, m):
+def topmAttacksAndBenign(attack,benign):
     totbytype = []
-    topmpercent = []
     for type in attack:
-
         totalFreq = []
-
         for folder in type:
             totalFreq = freqfindtot(folder)
             totbytype.append(totalFreq)
-    topmpercent = topm(totbytype, m)
-    return topmpercent
+    totalFreq = []
+    for folder in benign:
+        totalFreq = freqfindtot(folder)
+        totbytype.append(totalFreq)
+    return totbytype
 
+
+def toFreq(mFreq, sequence):
+    for type in sequence:
+
+        for folder in type:
+            for freq in mFreq:
+                n = 0
+                while (n < len(folder[0]))
+                    if (file)
 
 
 
@@ -203,18 +213,16 @@ def topmAttacksAndBenign(attack, m):
 
 m = .3
 attack = inputDataAttacks(1,7)
-topmAttacksAndBenign(attack, m)
 
 benign = inputDataBenign('Training_Data_Master')
-truebenign = [benign]
-print(len(truebenign))
-print(len(truebenign[0]))
-print(len(truebenign[0][0]))
-print(len(truebenign[0][0][0]))
+print(len(benign))
+print(len(benign[0]))
+print(len(benign[0][0]))
 print('attack:')
 print(len(attack))
 print(len(attack[0]))
 print(len(attack[0][0]))
 print(len(attack[0][0][0]))
 
-topmAttacksAndBenign(truebenign, m)
+topmper = topmAttacksAndBenign(attack,benign)
+topMFreq = topm(topmper,m)
