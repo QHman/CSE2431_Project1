@@ -239,11 +239,17 @@ print(len(attackTrainFreqs[0]))
 benignTrainFreqs = toFreq(topMFreq,[benign], 0)
 print(len(benignTrainFreqs[0]))
 
-attackValFreqs = toFreq(topMFreq, attackVal, 1)
-print(len(attackValFreqs[0]))
+trainFreq =(attackTrainFreqs+benignTrainFreqs)
+print(len(attackTrainFreqs))
+print(len(benignTrainFreqs))
+print(len(trainFreq))
+#attackValFreqs = toFreq(topMFreq, attackVal, 1)
+#print(len(attackValFreqs[0]))
 
-benignValFreqs = toFreq(topMFreq, [benignVal], 0)
-print(len(benignValFreqs[0]))
+#benignValFreqs = toFreq(topMFreq, [benignVal], 0)
+#print(len(benignValFreqs[0]))
+
+
 
 # toFreq gives an array of vectors. where each index is a call sequence
 
