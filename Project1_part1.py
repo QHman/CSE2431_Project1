@@ -196,20 +196,23 @@ def topmAttacksAndBenign(attack,benign):
 
 
 def toFreq(mFreq, sequence):
+    newFreqSet = []
     for type in sequence:
-
         for folder in type:
-            for freq in mFreq:
-                n = 0
-                while (n < len(folder[0]))
-                    if (file)
-
-
-
-
-
-
-
+            for file in folder:
+                newFreqSet = []
+                for freq in mFreq:
+                    n = 0
+                    passval = 0
+                    while (n < len(file[0]) and passval == 0):
+                        if (file[0][n] == file):
+                            newFreqSet.append(file[1][n])
+                            passval = 1
+                        n += 1
+                    if (passval == 1):
+                        newFreqSet.append(0)
+                totalNewFreq.append(newFreqSet)
+    return totalNewFreq
 
 m = .3
 attack = inputDataAttacks(1,7)
@@ -226,3 +229,5 @@ print(len(attack[0][0][0]))
 
 topmper = topmAttacksAndBenign(attack,benign)
 topMFreq = topm(topmper,m)
+attackFreqs = toFreq(topMFreq,attack)
+benignFreqs = toFreq(topMFreq,[benign])
