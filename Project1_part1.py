@@ -1,4 +1,5 @@
 import os
+import pandas as pd
 def inputDataAttacks(startnum, endnumfile):
     typeCalls = 'Attack_Data_Master'
     seqFreq = []
@@ -191,9 +192,9 @@ def topmAttacksAndBenign(attack,benign):
     return totbytype
 
 
-def toFreq(mFreq, sequence, mal):
+def toFreq(columns, mFreq, sequence, mal):
     newFreqSet = []
-    totalNewFreq = []
+    totalNewFreq = pd.DataFrame(columns = columns)
     for type in sequence:
         for folder in type:
             for file in folder:
@@ -209,7 +210,8 @@ def toFreq(mFreq, sequence, mal):
                     if (passval == 0):
                         newFreqSet.append(0)
                 newFreqSet.append(mal)
-                totalNewFreq.append(newFreqSet)
+                newFreqSet = pd.DataFrame([newFreqSet], columns = columns)
+                totalNewFreq = pd.concat([totalNewFreq,newFreqSet],ignore_index = True)
     print('Done: Freq')
     return totalNewFreq
 
@@ -232,24 +234,20 @@ attackVal = inputDataAttacks(7,10)
 topmper = topmAttacksAndBenign(attack,benign)
 topMFreq = topm(topmper,m)
 print(len(topMFreq))
+columns = []
+for freq in topMFreq:
+    columns.append(' '.join(freq))
+columns += ['Class']
+attackTrainFreqs = toFreq(columns,topMFreq,attack, 1)
 
-attackTrainFreqs = toFreq(topMFreq,attack, 1)
-print(len(attackTrainFreqs[0]))
+benignTrainFreqs = toFreq(columns,topMFreq,[benign], 0)
 
-benignTrainFreqs = toFreq(topMFreq,[benign], 0)
-print(len(benignTrainFreqs[0]))
+attackValFreqs = toFreq(columns,topMFreq, attackVal, 1)
 
-trainFreq =(attackTrainFreqs+benignTrainFreqs)
-print(len(attackTrainFreqs))
-print(len(benignTrainFreqs))
-print(len(trainFreq))
-#attackValFreqs = toFreq(topMFreq, attackVal, 1)
-#print(len(attackValFreqs[0]))
+benignValFreqs = toFreq(columns,topMFreq, [benignVal], 0)
 
-#benignValFreqs = toFreq(topMFreq, [benignVal], 0)
-#print(len(benignValFreqs[0]))
-
-
+#If yo want to put the benign and attavk training data together :
+#totTrainingData = pd.concat([benignTrainFreqs,attackTrainFreqs], ignore_index = True)
 
 # toFreq gives an array of vectors. where each index is a call sequence
 
