@@ -252,34 +252,38 @@ benignValFreqs = toFreq(columns,topMFreq, [benignVal], 0)
 # toFreq gives an array of vectors. where each index is a call sequence
 
 # data preprocessing
-# Separate attack data into attributes and labels
-x1 = attackFreqs.drop('Attack', axis=1)
-y1 = attackFreqs['Attack']
+# Separate attack data into attributes and labels (Training)
+xAttackTrainFreq = attackTrainFreqs.drop('Class', axis=1)
+yAttackTrainFreq = attackTrainFreqs['Class']
 
-# Separate benign data into attributes and labels
-x2 = benignFreqs.drop('Benign', axis=1)
-y2 = benignFreqs['Benign']
+# Separate benign data into attributes and labels (Training)
+xBenignTrainFreq = benignTrainFreqs.drop('Class', axis=1)
+yBenignTrainFreq = benignTrainFreqs['Class']
 
-# Divide data for attack and benign into respective training and test sets
-from sklearn.model_selection import train_test_split
-x_trainAttack, x_testAttack, y_trainAttack, y_testAttack = train_test_split(x1, y1, test_size = 0.30)
-x_trainBenign, x_testBenign, y_trainBenign, y_testBenign = train_test_split(x2, y2, test_size = 0.30)
+# Separate attack data into attributes and labels (Validation)
+xAttackValFreq = attackValFreqs.drop('Class', axis=1)
+yAttackValFreq = attackValFreqs['Class']
 
-# Train SVM algorithm using linear regression (Attack)
+# Separate benign data into attributes and labels (Validation)
+xBenignValFreq = benignValFreqs.drop('Class', axis=1)
+yBenignValFreq = benignValFreqs['Class']
+
+# Train SVM algorithm using linear regression (Attack & Benign)
 from sklearn.svm import SVC
 svclassifier = SVC(kernel='linear')
-svclassifier.fit(x_trainAttack, y_trainAttack)
+svclassifier.fit(xAttackTrainFreq, yAttackTrainFreq)
+svclassifier.fit(xBenignTrainFreq, yBenignTrainFreq)
 
 # Algorithm predictions and evaluation (Attack)
-y_predAttack = svclassifier.predict(x_testAttack)
+yPredAttack = svclassifier.predict(xAttackValFreq)
 from sklearn.metrics import classification_report, confusion_matrix
-print(confusion_matrix(y_testAttack,y_predAttack))
-print(classification_report(y_testAttack,y_predAttack))
+print(confusion_matrix(yAttackValFreq,yPredAttack))
+print(classification_report(yAttackValFreq,yPredAttack))
 
 # Train SVM algorithm using linear regression (Benign)
 svclassifier.fit(x_trainBenign, y_trainBenign)
 
-# Algorithm predictions and evaluation (Attack)
-y_predBenign = svclassifier.predict(x_testBenign)
-print(confusion_matrix(y_testBenign,y_predBenign))
-print(classification_report(y_testBenign,y_predBenign))
+# Algorithm predictions and evaluation (Benign)
+yPredBenign = svclassifier.predict(xBenignValFreq)
+print(confusion_matrix(yBenignValFreq,yPredBenign))
+print(classification_report(yBenignValFreq,yPredBenign))
