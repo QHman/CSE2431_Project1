@@ -1,35 +1,31 @@
+import os
+import pandas as pd
+import csv
+import numpy as np
+import matplotlib.pyplot as plt
+%matplotlib inline
 
-xAttackTrainFreq = attackTrainFreqs.drop('Class', axis=1)
-yAttackTrainFreq = attackTrainFreqs['Class']
+trainingData = pd.read_csv("training.csv")
+validationData = pd.read_csv("validation.csv")
 
-# Separate benign data into attributes and labels (Training)
-xBenignTrainFreq = benignTrainFreqs.drop('Class', axis=1)
-yBenignTrainFreq = benignTrainFreqs['Class']
+trainingData.shape
+validationData.shape
 
-# Separate attack data into attributes and labels (Validation)
-xAttackValFreq = attackValFreqs.drop('Class', axis=1)
-yAttackValFreq = attackValFreqs['Class']
+trainingData.head
+validationData.head
 
-# Separate benign data into attributes and labels (Validation)
-xBenignValFreq = benignValFreqs.drop('Class', axis=1)
-yBenignValFreq = benignValFreqs['Class']
+xTrainingData = trainingData.drop('Class', axis=1)
+yTrainingData = trainingData['Class']
 
-# Train SVM algorithm using linear regression (Attack & Benign)
+xValidationData = validationData.drop('Class', axis=1)
+yValidationData = validationData['Class']
+
 from sklearn.svm import SVC
 svclassifier = SVC(kernel='linear')
-svclassifier.fit(xAttackTrainFreq, yAttackTrainFreq)
-svclassifier.fit(xBenignTrainFreq, yBenignTrainFreq)
+svclassifier.fit(xTrainingData, yTrainingData)
 
-# Algorithm predictions and evaluation (Attack)
-yPredAttack = svclassifier.predict(xAttackValFreq)
+yPrediction = svclassifier.predict(xValidationData)
+
 from sklearn.metrics import classification_report, confusion_matrix
-print(confusion_matrix(yAttackValFreq,yPredAttack))
-print(classification_report(yAttackValFreq,yPredAttack))
-
-# Train SVM algorithm using linear regression (Benign)
-svclassifier.fit(x_trainBenign, y_trainBenign)
-
-# Algorithm predictions and evaluation (Benign)
-yPredBenign = svclassifier.predict(xBenignValFreq)
-print(confusion_matrix(yBenignValFreq,yPredBenign))
-print(classification_report(yBenignValFreq,yPredBenign))
+print(confusion_matrix(yValidationData, yPrediction))
+print(classification_report(yValidationData, yPrediction))
