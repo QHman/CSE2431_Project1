@@ -1,5 +1,6 @@
 import os
 import pandas as pd
+import csv
 def inputDataAttacks(startnum, endnumfile):
     typeCalls = 'Attack_Data_Master'
     seqFreq = []
@@ -193,7 +194,7 @@ def topmAttacksAndBenign(attack,benign):
 
 
 def toFreq(columns, mFreq, sequence, mal):
-    newFreqSet = []
+
     totalNewFreq = pd.DataFrame(columns = columns)
     for type in sequence:
         for folder in type:
@@ -210,8 +211,8 @@ def toFreq(columns, mFreq, sequence, mal):
                     if (passval == 0):
                         newFreqSet.append(0)
                 newFreqSet.append(mal)
-                newFreqSet = pd.DataFrame([newFreqSet], columns = columns)
-                totalNewFreq = pd.concat([totalNewFreq,newFreqSet],ignore_index = True)
+                dfnewFreqSet = pd.DataFrame([newFreqSet], columns = columns)
+                totalNewFreq = pd.concat([totalNewFreq,dfnewFreqSet],ignore_index = True)
     print('Done: Freq')
     return totalNewFreq
 
@@ -241,11 +242,14 @@ columns += ['Class']
 attackTrainFreqs = toFreq(columns,topMFreq,attack, 1)
 
 benignTrainFreqs = toFreq(columns,topMFreq,[benign], 0)
+totTrainingData = pd.concat([benignTrainFreqs,attackTrainFreqs], ignore_index = True)
+totTrainingData.to_csv('training.csv', index = False)
 
 attackValFreqs = toFreq(columns,topMFreq, attackVal, 1)
 
 benignValFreqs = toFreq(columns,topMFreq, [benignVal], 0)
-
+totTrainingData = pd.concat([benignTrainFreqs,attackTrainFreqs], ignore_index = True)
+totTrainingData.to_csv('validation.csv', index = False)
 #If yo want to put the benign and attavk training data together :
 #totTrainingData = pd.concat([benignTrainFreqs,attackTrainFreqs], ignore_index = True)
 
