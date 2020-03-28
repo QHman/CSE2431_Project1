@@ -250,5 +250,7 @@ attackValFreqs = toFreq(columns,topMFreq, attackVal, 1)
 benignValFreqs = toFreq(columns,topMFreq, [benignVal], 0)
 totValData = pd.concat([benignValFreqs,attackValFreqs], ignore_index = True)
 totValData.to_csv('validation.csv', index = False)
+#Test
+
 #If yo want to put the benign and attavk training data together :
 #totTrainingData = pd.concat([benignTrainFreqs,attackTrainFreqs], ignore_index = True)
