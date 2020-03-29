@@ -69,7 +69,7 @@ print(len(mFreq))
 columns = []
 for freq in mFreq:
     columns.append(' '.join(freq))
-input = inputData('data.txt')
+input = inputData('system_calls.txt')
 dataFreq = toFreq(columns,mFreq,input)
 
 loaded_malwareDetector = pickle.load(open(filename, 'rb'))
