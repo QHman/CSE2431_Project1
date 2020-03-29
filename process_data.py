@@ -70,11 +70,10 @@ columns = []
 for freq in mFreq:
     columns.append(' '.join(freq))
 input = inputData('data.txt')
-print(input)
 dataFreq = toFreq(columns,mFreq,input)
-print(dataFreq)
 
 loaded_malwareDetector = pickle.load(open(filename, 'rb'))
 
 prediction =loaded_malwareDetector.predict(dataFreq)
+print('Prediction: ')
 print(prediction)
