@@ -236,25 +236,24 @@ attackVal = inputDataAttacks(7,10)
 topmper = topmAttacksAndBenign(attack,benign)
 topMFreq = topm(topmper,m)
 print(len(topMFreq))
-topm = open('topm10.data', 'wb')
-pickle.dump(topMFreq, topm)
-topm.close()
+# topm = open('topm10.data', 'wb')
+# pickle.dump(topMFreq, topm)
+# topm.close()
 columns = []
 for freq in topMFreq:
     columns.append(' '.join(freq))
 columns += ['Class']
-#attackTrainFreqs = toFreq(columns,topMFreq,attack, 1)
+attackTrainFreqs = toFreq(columns,topMFreq,attack, 1)
 
-#benignTrainFreqs = toFreq(columns,topMFreq,[benign], 0)
-#totTrainingData = pd.concat([benignTrainFreqs,attackTrainFreqs], ignore_index = True)
-#totTrainingData.to_csv('training.csv', index = False)
+benignTrainFreqs = toFreq(columns,topMFreq,[benign], 0)
+totTrainingData = pd.concat([benignTrainFreqs,attackTrainFreqs], ignore_index = True)
+totTrainingData.to_csv('training.csv', index = False)
 
-#attackValFreqs = toFreq(columns,topMFreq, attackVal, 1)
+attackValFreqs = toFreq(columns,topMFreq, attackVal, 1)
 
-#benignValFreqs = toFreq(columns,topMFreq, [benignVal], 0)
-#totValData = pd.concat([benignValFreqs,attackValFreqs], ignore_index = True)
-#totValData.to_csv('validation.csv', index = False)
-#Test
+benignValFreqs = toFreq(columns,topMFreq, [benignVal], 0)
+totValData = pd.concat([benignValFreqs,attackValFreqs], ignore_index = True)
+totValData.to_csv('validation.csv', index = False)
 
 #If yo want to put the benign and attavk training data together :
 #totTrainingData = pd.concat([benignTrainFreqs,attackTrainFreqs], ignore_index = True)

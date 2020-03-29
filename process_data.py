@@ -58,6 +58,7 @@ def toFreq(columns, mFreq, file):
     print('Done: Freq')
     return dfnewFreqSet
 #Change 'topm30.data' to 'topm10.data' for the 10% machince
+filename = 'finalized_model30.sav'
 topm = open('topm30.data', 'rb')
 mFreq = pickle.load(topm)
 topm.close()
@@ -67,3 +68,9 @@ for freq in mFreq:
     columns.append(' '.join(freq))
 input = inputData('data.txt')
 dataFreq = toFreq(columns,mFreq,input)
+
+
+loaded_malwareDetector = pickle.load(open(filename, 'rb'))
+
+prediction =loaded_malwareDetector.predict(dataFreq)
+print(prediction)
