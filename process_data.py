@@ -42,21 +42,24 @@ def inputData(typeCalls):
     print("Done: input")
     return txtfile
 
-def toFreq(columns, mFreq, file):
-    newFreqSet = []
-    for freq in mFreq:
-        n = 0
-        passval = 0
-        while (n < len(file[0]) and passval == 0):
-            if (file[0][n] == freq):
-                newFreqSet.append(file[1][n])
-                passval = 1
-            n += 1
-        if (passval == 0):
-            newFreqSet.append(0)
-    dfnewFreqSet = pd.DataFrame([newFreqSet], columns = columns)
+def toFreq(columns, mFreq, folder):
+    for file in folder:
+        newFreqSet = []
+        for freq in mFreq:
+            n = 0
+            passval = 0
+            while (n < len(file[0]) and passval == 0):
+                if (file[0][n] == freq):
+                    newFreqSet.append(file[1][n])
+                    passval = 1
+                n += 1
+            if (passval == 0):
+                newFreqSet.append(0)
+        dfnewFreqSet = pd.DataFrame([newFreqSet], columns = columns)
     print('Done: Freq')
     return dfnewFreqSet
+
+
 #Change 'topm30.data' to 'topm10.data' for the 10% machince
 filename = 'finalized_model30.sav'
 topm = open('topm30.data', 'rb')
@@ -67,8 +70,9 @@ columns = []
 for freq in mFreq:
     columns.append(' '.join(freq))
 input = inputData('data.txt')
+print(input)
 dataFreq = toFreq(columns,mFreq,input)
-
+print(dataFreq)
 
 loaded_malwareDetector = pickle.load(open(filename, 'rb'))
 
