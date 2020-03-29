@@ -11,14 +11,18 @@ A machine learning malware detector in python and C.  With the detector created 
 
 The command will compile the C portion of this project:
 	
-	gcc -o ptrace_malware ptrace_malware.c
+	gcc -o ptrace_malware32 ptrace_malware32.c
 
 # Run
 
 1. Entire detector
 Once the code has been compiled to binary file 'ptrace_malware', it can be run using the following command:
 	
-	./ptrace_malware potential_malware potential_malware_args
+	./ptrace_malware32 potential_malware potential_malware_args
+
+After the command is done running, use:
+	
+	python process_data.py
 
 Output: Should print either an one or a zero if the software thinks it malware or benign respectfully
 
