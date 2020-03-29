@@ -216,7 +216,7 @@ def toFreq(columns, mFreq, sequence, mal):
     print('Done: Freq')
     return totalNewFreq
 
-m = .1
+m = .3
 attack = inputDataAttacks(1,7)
 
 benign = inputDataBenign('Training_Data_Master')
