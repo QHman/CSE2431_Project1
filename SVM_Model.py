@@ -35,7 +35,7 @@ print(classification_report(yValidationData, yPrediction))
 
 filename = 'finalized_model.sav'
 pickle.dump(maleware_detector, open(filename, 'wb'))
-
+print (maleware_detector) 
 # Code to load malware detector model
 # loaded_malwareDetector = pickle.load(open(filename, 'rb'))
 
