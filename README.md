@@ -13,12 +13,14 @@ The command will compile the C portion of this project:
 	
 	gcc -o ptrace_malware ptrace_malware.c
 
-# Runs
+# Run
 
 1. Entire detector
 Once the code has been compiled to binary file 'ptrace_malware', it can be run using the following command:
 	
 	./ptrace_malware potential_malware potential_malware_args
+
+Output: Should print either an one or a zero if the software thinks it malware or benign respectfully
 
 2. SVM model, this is needed to run the detector if the needed files are missing. (The files needed to run the entire detector should already be provided, this is here for completeness sake)
 Assuming the correct modules are installed (see header of python files) and the working directory is the same as the file, to get the training and validation data is parsed for the SVM machine run 'input_training_val.py' using:
