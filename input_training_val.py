@@ -2,6 +2,8 @@ import os
 import pandas as pd
 import csv
 import pickle
+
+# Takes in training and validation from the given files
 def inputDataAttacks(startnum, endnumfile):
     typeCalls = 'Attack_Data_Master'
     seqFreq = []
@@ -10,36 +12,41 @@ def inputDataAttacks(startnum, endnumfile):
     file = []
     folder = []
     directory = '\\'.join(['ADFA-LD', 'ADFA-LD', typeCalls])
+    # Types of attacks
     filetype = ('Adduser_', 'Hydra_FTP_', 'Hydra_SSH_', 'Java_Meterpreter_', 'Meterpreter_', 'Web_Shell_')
-    # Types of Attacks
+    # For each type of attack, there are several folders conatining files
+    # Iterate through the types of attacks
     for files in filetype:
         startnumfile = startnum
         folder = []
+        # Iterate through the folders of attack type "file", go through the files numbered "startnumfile" to "endnumfile"
         while(startnumfile <= endnumfile):
             directory2 = '\\'.join([directory, ''.join([files, str(startnumfile)])])
-            #   Folder in type ex. 1, 2, 3
-
             listing = os.listdir(directory2)
-            # Text Doc in folder... About 10
+            # Iterate through text files in folder... About 10
             for l in listing:
                 f = open('\\'.join([directory2,l]),'r')
+                # sequence is a string containing the calls seperated by spaces
                 sequence = f.read()
                 f.close()
+                # split changes the string to an array of calls that splits at the spaces
                 calls = sequence.split()
+                # gram = the size of the frequency sliding window
                 gram = 3
                 n = gram
                 seqFreq = []
                 numberSeqFreq = []
-                # Take sequence from file, change to frequency
+                # Take sequence from file, change to frequency using sliding window of size gram
                 while (len(calls) >= n ):
                     k = 0
                     seq = []
+                    # Slide along the call sequence
                     while(k < gram):
                         seq.append(calls[(n+k-gram)])
                         k += 1
                     k = 0
                     passval = 0
-                    # Save each frequency, per text file
+                    # Save each frequency, if a sequence is repeated, it increments the frequency for that sequence
                     while (k < len(seqFreq) and passval == 0):
                         if(len(seqFreq) == 0):
                             seqFreq.append(seq)
@@ -62,6 +69,7 @@ def inputDataAttacks(startnum, endnumfile):
     print("Done: Attack")
     return attacks
 
+#Similar to inputDataAttacks, but the benign data is just a sigle folder containing a large amount of files
 def inputDataBenign(typeCalls):
     seqFreq = []
     numberSeqFreq = []
@@ -71,17 +79,19 @@ def inputDataBenign(typeCalls):
     filetype = os.listdir(directory)
     # Types of Attacks
     txtfile = []
-    for type in filetype:
-        f = open('\\'.join([directory,type]),'r')
+    # Iterates through all the files contained in the benign file
+    for file in filetype:
+        f = open('\\'.join([directory,file]),'r')
         sequence = f.read()
         f.close()
+        # split changes the string to an array of calls that splits at the spaces
         calls = sequence.split()
+        # gram = the size of the frequency sliding window
         gram = 3
         n = gram
         seqFreq = []
         numberSeqFreq = []
-        # Take sequence from file, change to frequency
-
+        # Take sequence from file, mare an array of sequences with corresponding frequencies
         while (len(calls) >= n ):
             k = 0
             seq = []
@@ -90,7 +100,7 @@ def inputDataBenign(typeCalls):
                 k += 1
             k = 0
             passval = 0
-            # Save each frequency, per text file
+            # Save each frequency, per text file, put all in one largq array
             while (k < len(seqFreq) and passval == 0):
                 if(len(seqFreq) == 0):
                     seqFreq.append(seq)
@@ -109,6 +119,7 @@ def inputDataBenign(typeCalls):
     print("Done: Benign")
     return benign
 
+#Takes the sequences
 def freqfindtot(folder): # [2xn], [calls, number]
     total = []
     seqFreq = []
