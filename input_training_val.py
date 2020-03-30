@@ -119,14 +119,17 @@ def inputDataBenign(typeCalls):
     print("Done: Benign")
     return benign
 
-#Takes the sequences
+#Takes the sequences in the different files it is given and adds the frequencies together, condensing them
 def freqfindtot(folder): # [2xn], [calls, number]
     total = []
     seqFreq = []
     numberSeqFreq = []
+    # Iterates for all the files in the array
     for file in folder:
         n = 0
-        while (n < len(file[0])):
+        #This loop goes through and checks if an sequence is already in the final array, if so it adds the frequecy from the input to the final array
+        #If the sequence is not in the final array, it appends the frequecy and sequnce to the final array
+        while (n < len(file[0]))
             k = 0
             passval = 0
             while (k < len(seqFreq) and passval == 0):
@@ -141,18 +144,22 @@ def freqfindtot(folder): # [2xn], [calls, number]
                 seqFreq.append(file[0][n])
                 numberSeqFreq.append(file[1][n])
             n += 1
+    # Returns the condensed frequecy sets
     return [seqFreq,numberSeqFreq]
 
-# finds top m, need to give it array of arrays conatining the calls and the frequencies
+# Finds top m percent of the set, need to give it array of arrays conatining the calls and the frequencies
+# variable m is the percent.
 def topm(totbytype, m):
     totalTopFreq = []
     calls = []
     count = []
     for  type in totbytype: # type
+        # k is the number of sequences it will keep
         k = round(m*len(type[0]))
         topcount = []
         topcalls =[]
         n = 0
+        # Iterate through all the sequences in the file and sort them from highest to lowest
         while (n < len(type[0])):
             l = 0
             count = type[1][n]
@@ -171,8 +178,11 @@ def topm(totbytype, m):
             topcalls.append(calls)
             n += 1
         totalFreq = []
+        # topcount contains the sorted freque corresponding to the sequnces of calls in topcalls
+        #This Iterates over the list of top frequencies and only keeps the top m% or k amount
         for x in range(int(k)):
             totalFreq.append(topcalls[x])
+        # Implimented to remove duplicates in the top frequencies
         for freq in totalFreq:
             if (len(totalTopFreq) == 0):
                 totalTopFreq.append(freq)
@@ -183,15 +193,12 @@ def topm(totbytype, m):
                         passval == 1
                 if (passval == 0):
                     totalTopFreq.append(freq)
+    #Return the top m calls
     return totalTopFreq
 
 
-
-
-
- # attack: data in, m: percent top, ex .2, .3
-
-def topmAttacksAndBenign(attack,benign):
+#Combines the two variables since they are both multilayered to preserve infomation, but are needed together for some operations
+def combine(attack,benign):
     totbytype = []
     for type in attack:
         totalFreq = []
@@ -205,8 +212,9 @@ def topmAttacksAndBenign(attack,benign):
     return totbytype
 
 
+# Takes the top m% frequencies and sets the data to said frequencies and disregards the lower frequencies
 def toFreq(columns, mFreq, sequence, mal):
-
+    #Creates DataFrame with the top m% frequencies as the columns
     totalNewFreq = pd.DataFrame(columns = columns)
     for type in sequence:
         for folder in type:
@@ -215,54 +223,62 @@ def toFreq(columns, mFreq, sequence, mal):
                 for freq in mFreq:
                     n = 0
                     passval = 0
+                    #Goes through the call sequence and checks if one matches a top m% frequecy,
                     while (n < len(file[0]) and passval == 0):
+                        #if there is a match for a top m% frequecy in the data set, it sets the frequecy from the dataset to be in the postion for said top m% frequecy sequence
                         if (file[0][n] == freq):
                             newFreqSet.append(file[1][n])
                             passval = 1
                         n += 1
+                    #If it doesn't exist in the data set, it puts a zero
                     if (passval == 0):
                         newFreqSet.append(0)
+                #This adds the final column for the training and valiidation. It is an identifier if it is malware or benign
+                # 0 = Beign, 1 = Malware
                 newFreqSet.append(mal)
+
                 dfnewFreqSet = pd.DataFrame([newFreqSet], columns = columns)
                 totalNewFreq = pd.concat([totalNewFreq,dfnewFreqSet],ignore_index = True)
     print('Done: Freq')
+    #Returns the dataframe of the frequecy set
     return totalNewFreq
 
 m = .1
 attack = inputDataAttacks(1,7)
 
 benign = inputDataBenign('Training_Data_Master')
-print(len(benign))
-print(len(benign[0]))
-print(len(benign[0][0]))
-print('attack:')
-print(len(attack))
-print(len(attack[0]))
-print(len(attack[0][0]))
-print(len(attack[0][0][0]))
 
 benignVal = inputDataBenign('Validation_Data_Master')
 attackVal = inputDataAttacks(7,10)
 
-topmper = topmAttacksAndBenign(attack,benign)
+topmper = combine(attack,benign)
 topMFreq = topm(topmper,m)
 print(len(topMFreq))
-# topm = open('topm10.data', 'wb')
-# pickle.dump(topMFreq, topm)
-# topm.close()
+
+#Saves the top m% frequencies into a file so that the set can be used in a different file
+topm = open('topm10.data', 'wb')
+pickle.dump(topMFreq, topm)
+topm.close()
+
+#Takes the top m% frequencies and turns them into a an array of strings so that they can be used as columns in the DataFrame variable
 columns = []
 for freq in topMFreq:
     columns.append(' '.join(freq))
+#Adds 'Class' to the end of the columns for the identifier for malware or benign
+# 0 = Beign, 1 = Malware
 columns += ['Class']
-attackTrainFreqs = toFreq(columns,topMFreq,attack, 1)
 
+attackTrainFreqs = toFreq(columns,topMFreq,attack, 1)
 benignTrainFreqs = toFreq(columns,topMFreq,[benign], 0)
+
+#Combines the training data and outputs it to a .csv file to be hadled in a different script
 totTrainingData = pd.concat([benignTrainFreqs,attackTrainFreqs], ignore_index = True)
 totTrainingData.to_csv('training.csv', index = False)
 
 attackValFreqs = toFreq(columns,topMFreq, attackVal, 1)
-
 benignValFreqs = toFreq(columns,topMFreq, [benignVal], 0)
+
+#Combines the validation data and outputs it to a .csv file to be hadled in a different script
 totValData = pd.concat([benignValFreqs,attackValFreqs], ignore_index = True)
 totValData.to_csv('validation.csv', index = False)
 

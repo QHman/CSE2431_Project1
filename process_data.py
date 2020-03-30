@@ -61,8 +61,8 @@ def toFreq(columns, mFreq, folder):
 
 
 #Change 'topm30.data' to 'topm10.data' for the 10% machince
-filename = 'finalized_model30.sav'
-topm = open('topm30.data', 'rb')
+filename = 'finalized_model10.sav'
+topm = open('topm10.data', 'rb')
 mFreq = pickle.load(topm)
 topm.close()
 print(len(mFreq))

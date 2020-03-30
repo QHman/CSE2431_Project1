@@ -33,7 +33,7 @@ print(confusion_matrix(yValidationData, yPrediction))
 print(classification_report(yValidationData, yPrediction))
 
 
-filename = 'finalized_model30.sav'
+filename = 'finalized_model10.sav'
 print(filename)
 pickle.dump(maleware_detector, open(filename, 'wb'))
 
